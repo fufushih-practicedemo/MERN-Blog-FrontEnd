@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import Image from 'next/image'
+import Link from 'next/link'
 import Layout from '../components/layout'
 
 export default function Home() {
@@ -14,6 +14,9 @@ export default function Home() {
       <main>
         <Layout>
           <h2>Test</h2>
+          <Link href="/signup">
+            <a>Signup</a>
+          </Link>
         </Layout>
       </main>
 

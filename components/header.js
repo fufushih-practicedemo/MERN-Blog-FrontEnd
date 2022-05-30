@@ -1,12 +1,20 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { APP_NAME } from '../config';
 import {
   Collapse,
   Navbar, NavbarToggler, Nav, NavItem, NavLink, NavbarBrand
 } from 'reactstrap';
+import Link from 'next/link';
+import Router from 'next/router';
+import { signout, isAuth } from '../actions/auth';
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isBrowser, setIsBrowser] = useState(false);
+
+  useEffect(() => {
+    (typeof window !== 'undefined') && setIsBrowser(true);
+  }, []);
 
   const toggle = () => {
     setIsOpen(!isOpen);
@@ -15,16 +23,43 @@ const Header = () => {
   return (
     <div>
       <Navbar color="light" light expand="md">
-        <NavbarBrand href="/">{APP_NAME}</NavbarBrand>
+        <Link href="/">
+          <NavLink className='font-weight-bold'>{APP_NAME}</NavLink>
+        </Link>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className="ml-auto" navbar>
-            <NavItem>
-              <NavLink href="/components/">Components</NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink href="https://github.com/reactstrap/reactstrap">GitHub</NavLink>
-            </NavItem>
+            {
+              isBrowser && !isAuth() && (
+                <React.Fragment>
+                  <NavItem>
+                    <Link href="/signup">
+                      <NavLink>
+                        Signup
+                      </NavLink>
+                    </Link>
+                  </NavItem>
+                  <NavItem>
+                    <Link href="/signin">
+                      <NavLink>
+                        Signin
+                      </NavLink>
+                    </Link>
+                  </NavItem>
+                </React.Fragment>
+              )
+            }
+            {/* {JSON.stringify(isAuth())} */}
+            {
+              isBrowser && isAuth() && (
+                <NavItem>
+                    <NavLink 
+                      onClick={() => signout(() => Router.replace('/signin'))}
+                      style={{cursor: 'pointer'}}
+                    >Signout</NavLink>
+                </NavItem>
+              )
+            }
           </Nav>
         </Collapse>
       </Navbar>
