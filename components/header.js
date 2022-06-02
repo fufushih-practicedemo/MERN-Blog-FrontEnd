@@ -5,12 +5,40 @@ import {
   Navbar, NavbarToggler, Nav, NavItem, NavLink, NavbarBrand
 } from 'reactstrap';
 import Link from 'next/link';
-import Router from 'next/router';
+import {Router, useRouter} from 'next/router';
+import NProgress from 'nprogress';
 import { signout, isAuth } from '../actions/auth';
 
+
 const Header = () => {
+  const router = useRouter()
+
   const [isOpen, setIsOpen] = useState(false);
   const [isBrowser, setIsBrowser] = useState(false);
+
+
+  useEffect(() => {
+    const handleRouteChange = (url) => {
+      console.log('route start complete')
+      NProgress.start()
+    }
+    router.events.on('routeChangeStart', handleRouteChange)
+  }, [])
+
+  useEffect(() => {
+    const handleRouteChange = (url) => {
+      console.log('route change complete')
+      NProgress.done()
+    }
+    router.events.on('routeChangeComplete', handleRouteChange)
+  }, [])
+
+  useEffect(() => {
+    const handleRouteChange = (url) => {
+      NProgress.done()
+    }
+    router.events.on('routeChangeError', handleRouteChange)
+  }, [])
 
   useEffect(() => {
     (typeof window !== 'undefined') && setIsBrowser(true);
