@@ -49,7 +49,25 @@ const Header = () => {
                 </React.Fragment>
               )
             }
-            {/* {JSON.stringify(isAuth())} */}
+            
+            {
+              isBrowser && isAuth() && isAuth().role === 0 && (
+                <NavItem>
+                  <Link href="/user">
+                    <NavLink>{`${isAuth().name}'s Dashboard`}</NavLink>
+                  </Link>
+                </NavItem>
+              )
+            }
+            {
+              isBrowser && isAuth() && isAuth().role === 1 && (
+                <NavItem>
+                  <Link href="/admin">
+                    <NavLink>{`${isAuth().name}'s Dashboard`}</NavLink>
+                  </Link>
+                </NavItem>
+              )
+            }
             {
               isBrowser && isAuth() && (
                 <NavItem>
