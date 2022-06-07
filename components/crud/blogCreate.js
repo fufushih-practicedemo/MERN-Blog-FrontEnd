@@ -3,8 +3,11 @@ import React, { useState, useEffect } from 'react'
 import {withRouter} from 'next/router'
 import { getCategories } from '../../actions/category'
 import { getTags } from '../../actions/tag'
+import { getCookie, isAuth } from '../../actions/auth'
+import { createBlog } from '../../actions/blog';
+import { QuillModules, QuillFormats } from '../../helpers/quill'
 
-const ReactQuill = dynamic(()=>import('react-quill', {ssr:false}))
+const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 import '../../node_modules/react-quill/dist/quill.snow.css'
 
 const CreateBlog = ({router}) => {
@@ -22,6 +25,9 @@ const CreateBlog = ({router}) => {
 
   const [categories, setCategories] = useState([]);
   const [tags, setTags] = useState([]);
+
+  const [checked, setChecked] = useState([]) // category
+  const [checkedTag, setCheckedTag] = useState([]) // tag
   
   const [body, setBody] = useState(blogFormLS())
   const [values, setValues] = useState({
@@ -34,6 +40,7 @@ const CreateBlog = ({router}) => {
   });
 
   const {error, sizeError, success, formData, title, hidePublishButton} = values;
+  const token = getCookie('token')
 
   useEffect(() => {
     setValues({...values, formData: new FormData()})
@@ -63,6 +70,16 @@ const CreateBlog = ({router}) => {
 
   const publishBlog = (e) => {
     e.preventDefault()
+    createBlog(formData, token).then(data => {
+      if(data.error) {
+        setValues({...values, error: data.error})
+      } else {
+        setValues({...values, title: '', error: '', success: `A new blog title "${data.title}" is created`})
+        setBody('');
+        setCategories([]);
+        setTags([]);
+      }
+    })
   }
 
   const handleChane = name => e => {
@@ -79,6 +96,68 @@ const CreateBlog = ({router}) => {
     }
   }
 
+  const handleToggle = c => () => {
+    setValues({...values, error: ''})
+    // return the first index or -1
+    const clickedCategory = checked.indexOf(c)
+    const all = [...checked]
+
+    if(clickedCategory === -1) {
+      all.push(c)
+    } else {
+      all.splice(clickedCategory, 1)
+    }
+    console.log(all)
+    setChecked(all)
+    formData.set('categories', all)
+  }
+
+  const handleTagsToggle = t => () => {
+    setValues({...values, error: ''})
+    // return the first index or -1
+    const clickedTag = checked.indexOf(t)
+    const all = [...checkedTag]
+
+    if(clickedTag === -1) {
+      all.push(t)
+    } else {
+      all.splice(clickedTag, 1)
+    }
+    console.log(all)
+    setCheckedTag(all)
+    formData.set('tags', all)
+  }
+
+  const showCategories = () => {
+    return (
+      categories && categories.map((c, i) => (
+        <li key={i} className='list-unsyled'>
+          <input onChange={handleToggle(c._id)} type='checkbox' className='mr-2' />
+          <label className='form-check-label'>{c.name}</label>
+        </li>
+      ))
+    )
+  }
+
+  const showTags = () => {
+    return (
+      tags && tags.map((t, i) => (
+        <li key={i} className='list-unsyled'>
+          <input onChange={handleTagsToggle(t._id)} type='checkbox' className='mr-2' />
+          <label className='form-check-label'>{t.name}</label>
+        </li>
+      ))
+    )
+  }
+
+  const showError = () => (
+    <div className='alert alert-danger' style={{display: error ? '': 'none'}}>{error}</div>
+  )
+
+  const showSuccess = () => (
+    <div className='alert alert-danger' style={{display: success ? '': 'none'}}>{success}</div>
+  )
+
   const createBlogForm = () => {
     return (
       <form onSubmit={publishBlog}>
@@ -89,8 +168,8 @@ const CreateBlog = ({router}) => {
 
         <div className='form-group'>
           <ReactQuill 
-            modules={CreateBlog.modules} 
-            formats={CreateBlog.formats}
+            modules={QuillModules} 
+            formats={QuillFormats}
             value={body} 
             placeholder="Write something amazing..." 
             onChange={handleBody} 
@@ -107,57 +186,48 @@ const CreateBlog = ({router}) => {
   }
 
   return (
-    <div className='container-fluid'>
+    <div className='container-fluid pb-5'>
       <div className='row'>
         <div className='col-md-8'>
           {createBlogForm()}
-          <div>
-            {JSON.stringify(title)}
-            <hr />
-            {JSON.stringify(body)}
+          <div className='pt-3'>
+            {showError()}
+            {showSuccess()}
           </div>
         </div>
         <div className='col-md-4'>
-          <h5>Categories</h5>
-          <hr />
-          {JSON.stringify(categories)}
+          <div>
+            <div className='form-group pb-2'>
+              <h5>Featured image</h5>
+              <hr />
 
-          <h5>Tags</h5>
-          <hr/>
-          {JSON.stringify(tags)}
+              <small className='text-muted'>Max size:1mb</small>
+              <label className='btn btn-outline-info'>
+                Upload featured image
+                <input onChange={handleChane('photo')} type='file' accept='image/*' hidden/>
+                </label>
+            </div>
+          </div>
+          <div>
+            <h5>Categories</h5>
+            <hr />
+            <ul style={{maxHeight: '200px', overflowY: 'scroll'}}>
+              {showCategories()}
+            </ul>
+          </div>
+
+          <div>
+            <h5>Tags</h5>
+            <hr/>
+            <ul style={{maxHeight: '200px', overflowY: 'scroll'}}>
+              {showTags()}
+            </ul>
+          </div>
         </div>
       </div>
     </div>
   )
 }
 
-CreateBlog.modules = {
-  toolbar: [
-      [{ header: '1' }, { header: '2' }, { header: [3, 4, 5, 6] }, { font: [] }],
-      [{ size: [] }],
-      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-      [{ list: 'ordered' }, { list: 'bullet' }],
-      ['link', 'image', 'video'],
-      ['clean'],
-      ['code-block']
-  ]
-};
-
-CreateBlog.formats = [
-  'header',
-  'font',
-  'size',
-  'bold',
-  'italic',
-  'underline',
-  'strike',
-  'blockquote',
-  'list',
-  'bullet',
-  'link',
-  'image',
-  'video',
-  'code-block'
-];
 
 export default withRouter(CreateBlog)
