@@ -8,6 +8,7 @@ import Link from 'next/link';
 import {Router, useRouter} from 'next/router';
 import NProgress from 'nprogress';
 import { signout, isAuth } from '../actions/auth';
+import Search from './blog/search';
 
 
 const Header = () => {
@@ -49,7 +50,7 @@ const Header = () => {
   };
 
   return (
-    <div>
+    <React.Fragment>
       <Navbar color="light" light expand="md">
         <Link href="/">
           <NavLink className='font-weight-bold'>{APP_NAME}</NavLink>
@@ -117,7 +118,8 @@ const Header = () => {
           </Nav>
         </Collapse>
       </Navbar>
-    </div>
+      <Search />
+    </React.Fragment>
   );
 }
 
