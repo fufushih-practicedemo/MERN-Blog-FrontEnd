@@ -8,7 +8,8 @@ const nextConfig = {
     PRODUCTION: false,
     DOMAIN_DEVELOPMENT: 'http://localhost:3000',
     DOMAIN_PRODUCTION: 'https//seoblog.com',
-    FB_APP_ID: ''
+    FB_APP_ID: '',
+    DISQUS_SHORTNAME: 'mernblog-1'
   }
 }
 
