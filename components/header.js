@@ -5,7 +5,7 @@ import {
   Navbar, NavbarToggler, Nav, NavItem, NavLink, NavbarBrand
 } from 'reactstrap';
 import Link from 'next/link';
-import {Router, useRouter} from 'next/router';
+import Router, {useRouter} from 'next/router';
 import NProgress from 'nprogress';
 import { signout, isAuth } from '../actions/auth';
 import Search from './blog/search';
@@ -115,6 +115,12 @@ const Header = () => {
                 </NavItem>
               )
             }
+
+            <NavItem>
+              <Link href="/user/crud/create">
+                <NavLink className='btn btn-primary text-light'>Write a blog</NavLink>
+              </Link>
+            </NavItem>
           </Nav>
         </Collapse>
       </Navbar>
