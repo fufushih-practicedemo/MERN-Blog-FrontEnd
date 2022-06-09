@@ -117,10 +117,17 @@ const Header = () => {
             }
 
             <NavItem>
+              <Link href="/contact">
+                <NavLink>Contact</NavLink>
+              </Link>
+            </NavItem>
+
+            <NavItem>
               <Link href="/user/crud/blog">
                 <NavLink className='btn btn-primary text-light'>Write a blog</NavLink>
               </Link>
             </NavItem>
+
           </Nav>
         </Collapse>
       </Navbar>

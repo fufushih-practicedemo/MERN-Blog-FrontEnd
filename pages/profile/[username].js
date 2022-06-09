@@ -4,10 +4,8 @@ import Layout from '../../components/Layout';
 import React, { useState, useEffect } from "react";
 import { userPublicProfile } from '../../actions/user';
 import { API, DOMAIN, APP_NAME, FB_APP_ID } from '../../config';
-import renderHTML from 'react-render-html';
 import moment from 'moment';
-import { listRealated } from '../../actions/blog';
-import SmallCard from '../../components/blog/small-card';
+import ContactForm from '../../components/form/contactForm';
 
 const UserProfile = ({user, blogs, query}) => {
 
@@ -98,7 +96,7 @@ const UserProfile = ({user, blogs, query}) => {
                     {`Message ${user.name}`}
                   </h5>
                   <br />
-                  <p>Contant from</p>
+                  <ContactForm authorEmail={user.email} />
                 </div>
               </div>
             </div>

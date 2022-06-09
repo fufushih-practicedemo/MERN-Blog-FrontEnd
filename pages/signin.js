@@ -1,6 +1,6 @@
 import React from 'react'
 import SigninComponent from '../components/auth/signin.component'
-import {withROuter} from 'next/router'
+import {withRouter} from 'next/router'
 import Layout from '../components/layout'
 
 const Signin = ({router}) => {
@@ -30,4 +30,4 @@ const Signin = ({router}) => {
   )
 }
 
-export default withROuter(Signin)
+export default withRouter(Signin)
