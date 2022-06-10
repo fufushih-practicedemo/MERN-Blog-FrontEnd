@@ -2,6 +2,7 @@ import fetch from "isomorphic-fetch";
 import cookie from 'js-cookie';
 import { API } from "../config";
 import Router from "next/router";
+import crypto from "crypto"
 
 export const handleResponse = response => {
   if(response.status === 401) {
@@ -69,7 +70,7 @@ export const signout = (next) => {
   removeLocalStorage('user')
   next()
 
-  return fetch(`${API}/signup`, {
+  return fetch(`${API}/signout`, {
     method: 'GET'
   })
   .then(response => {
