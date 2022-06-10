@@ -13,10 +13,40 @@ export default function Home() {
 
       <main>
         <Layout>
-          <h2>Test</h2>
-          <Link href="/signup">
-            <a>Signup</a>
-          </Link>
+          <div className='container'>
+            <div className='row'>
+              <div className='md-12'>
+                <div className='card p-5'>
+                  <h1 className='card-title'>MERN Demo</h1>
+                  <div className='card-body'>  
+                    <p>What is this?</p>
+                    <p>This is my practice demo with express, mongodb and Nextjs</p>
+                  </div>
+                  <div className='card-body'>
+                    <h4>What is the feature in this demo?</h4>
+                    <ul>
+                      <li>Create Update Delete and List with blog feature. and upload photo</li>
+                      <li>Search for blog feature</li>
+                      <li>Create Update Delete and List with categories and tags</li>
+                      <li>Create Update Delete and List with user profile feature.</li>
+                      <li>Simple Auth with signin, signout and signup. And signup should check mail to activate.</li>
+                      <li>Contact author with gmail</li>
+                      <li>When forgot password, reset with mail</li>
+                    </ul>
+                  </div>
+                  <div className='card-body'>
+                    <p>Link:</p>
+                    <a className="btn btn-primary m-2" target="_blank" href='https://github.com/fufushih-practicedemo/MERN-Blog-FrontEnd'>
+                      Source Code: Frontend
+                    </a>
+                    <a className="btn btn-primary m-2" target="_blank" href='https://github.com/fufushih-practicedemo/MERN-Blog-Backend'>
+                      Source Code: Backend
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </Layout>
       </main>
 
