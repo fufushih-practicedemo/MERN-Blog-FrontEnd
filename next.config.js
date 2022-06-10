@@ -9,7 +9,8 @@ const nextConfig = {
     DOMAIN_DEVELOPMENT: 'http://localhost:3000',
     DOMAIN_PRODUCTION: 'https//seoblog.com',
     FB_APP_ID: '',
-    DISQUS_SHORTNAME: 'mernblog-1'
+    DISQUS_SHORTNAME: 'mernblog-1',
+    SALT: 'afiuhauidhfiacbi'
   }
 }
 
